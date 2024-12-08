@@ -1,0 +1,82 @@
+# dependencies
+node_modules
+
+# logs
+*.log
+
+# next.js
+.next
+next-env.d.ts
+
+# build
+/application_build
+dist
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Coverage reports
+coverage/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Electron specific
+/out
+/app
+/main
+renderer/.next
+renderer/out
+*.cert
+*.crt
+*.key
+*.pfx
+
+# Production build
+/dist-electron
+/release
+*.exe
+*.dmg
+*.zip
+*.blockmap
+*.AppImage
+
+# Development specific
+.electron-builder.env
+
+# System specific
+Thumbs.db
+desktop.ini
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+*.db
+*.db-journal
+/prisma/migrations/
+/prisma/generated/
+.env*.prisma
+.prisma/client/
+
+# Prisma local development
+dev.db
+dev.db-journal

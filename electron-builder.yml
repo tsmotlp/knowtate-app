@@ -1,0 +1,18 @@
+appId: com.example.nextron
+productName: Knowtate
+copyright: Copyright © 2024 yqhuang
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
+linux:
+  target:
+    - deb
+    - rpm
+    - snap
+  category: Utility
