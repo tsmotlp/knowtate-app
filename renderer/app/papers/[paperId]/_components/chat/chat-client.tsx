@@ -1,10 +1,9 @@
 "use client";
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { ChatForm } from "./chat-form";
 import { ChatMessages } from "./chat-messages";
 import { useRouter } from "next/navigation";
 import { ChatMessageProps } from "./chat-message";
-import Image from "next/image";
 import { HISTORY_MESSAGE_N } from "@/constants";
 import { Message } from "@prisma/client";
 import axios from "axios";
@@ -69,7 +68,7 @@ export const ChatClient = ({
         role: "assistant",
         content: fullMessage,
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error("Something went wrong.");
     } finally {
       setIsLoading(false);
@@ -94,7 +93,7 @@ export const ChatClient = ({
   };
 
   return (
-    <div className="flex flex-col justify-between p-4 space-y-2 h-full w-full">
+    <div className="flex flex-col justify-between p-4 space-y-2 size-full">
       <div className="flex-1 overflow-y-auto">
         <ChatMessages isLoading={isLoading} messages={messages} />
       </div>

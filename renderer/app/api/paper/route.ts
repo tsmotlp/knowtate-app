@@ -4,6 +4,14 @@ import { createPaper } from "@/data/paper";
 import { createNote } from "@/data/note";
 import PDFParser from "pdf2json";
 
+interface PDFMetadata {
+  [key: string]: any;  // 允许任意字符串键
+}
+
+interface PDFData {
+  Meta: PDFMetadata;
+}
+
 const parsePdfDate = (dateStr: string): Date | null => {
   // 正则表达式来提取日期部分
   const match = /D:(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})Z/.exec(dateStr);
@@ -24,7 +32,7 @@ const parsePdfDate = (dateStr: string): Date | null => {
 export const POST = async (req: NextRequest) => {
   try {
     const formData = await req.formData()
-    const paper = formData.get("paper") as any;
+    const paper = formData.get("paper") as File;
     const title = formData.get("title") as string;
     const categoryId = formData.get("categoryId") as string;
 
@@ -41,26 +49,23 @@ export const POST = async (req: NextRequest) => {
     const data = await paper.arrayBuffer();
     const buffer = Buffer.from(data);
 
-    const pdfData = await new Promise((resolve, reject) => {
+    const pdfData = await new Promise<PDFData>((resolve, reject) => {
       const pdfParser = new PDFParser()
-      pdfParser.on("pdfParser_dataError", (errData: any) => {
-        reject(errData)
+      pdfParser.on("pdfParser_dataError", (errData: { parserError: Error }) => {
+        reject(errData.parserError)
       })
-      pdfParser.on("pdfParser_dataReady", async (pdfData: any) => {
+      pdfParser.on("pdfParser_dataReady", (pdfData: PDFData) => {  // 移除 async
         resolve(pdfData)
       })
       pdfParser.parseBuffer(buffer)
     })
-    const paperTitle = (pdfData as any).Meta.Title ? (pdfData as any).Meta.Title : title
-    const authors = (pdfData as any).Meta.Author
-    const publication = (pdfData as any).Meta.Subject
-    const publicateDate = (pdfData as any).Meta.publicateDate
-    let date = undefined
-    if (publicateDate) {
-      date = parsePdfDate(publicateDate)?.toDateString()
-    }
+    const paperTitle = (pdfData.Meta.Title as string) || title
+    const authors = pdfData.Meta.Author as string
+    const publication = pdfData.Meta.Subject as string
+    const publicateDate = pdfData.Meta.publicateDate as string
+    const parsedDate = publicateDate ? parsePdfDate(publicateDate)?.toDateString() : undefined
     await fs.writeFile(`renderer/public${url}`, buffer);
-    const paperInfo = await createPaper(paperTitle, url, categoryId, authors, publication, publicateDate)
+    const paperInfo = await createPaper(paperTitle, url, categoryId, authors, publication, parsedDate)
     if (paperInfo) {
       await createNote(`《${paperInfo.title}》的笔记`, "Markdown", "notes", paperInfo.id)
       await createNote(`《${paperInfo.title}》的白板`, "Whiteboard", "whiteboards", paperInfo.id)

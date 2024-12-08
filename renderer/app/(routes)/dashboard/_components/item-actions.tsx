@@ -1,4 +1,5 @@
 "use client"
+import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Download,
-  FileIcon,
   FilePen,
   Heart,
   MoreVertical,
@@ -38,7 +38,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { DashboardItem, DashboardItemType } from "@/types/types";
-import { useRouter } from "next/navigation";
 
 interface ItemActionsProps {
   item: DashboardItem
@@ -139,7 +138,7 @@ export const ItemActions = ({
       </AlertDialog>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <MoreVertical className="h-5 w-5 p-1 hover:bg-primary/10" />
+          <MoreVertical className="size-5 p-1 hover:bg-primary/10" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {isArchived ? (
@@ -148,7 +147,7 @@ export const ItemActions = ({
                 onClick={handleToggleArchive}
                 className="flex gap-2 items-center cursor-pointer text-muted-foreground"
               >
-                <Undo2 className="w-4 h-4" /> 恢复
+                <Undo2 className="size-4" /> 恢复
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -175,11 +174,11 @@ export const ItemActions = ({
               >
                 {isFavorited ? (
                   <>
-                    <Heart className="text-red-500 h-4 w-4 fill-red-500" /> 取消收藏
+                    <Heart className="size-4 text-red-500 fill-red-500" /> 取消收藏
                   </>
                 ) : (
                   <>
-                    <Heart className="h-4 w-4" /> 收藏
+                    <Heart className="size-4" /> 收藏
                   </>
                 )}
               </DropdownMenuItem>
@@ -192,7 +191,7 @@ export const ItemActions = ({
                     }}
                     className="flex gap-2 items-center cursor-pointer text-muted-foreground"
                   >
-                    <Download className="w-4 h-4" /> 下载
+                    <Download className="size-4" /> 下载
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </>

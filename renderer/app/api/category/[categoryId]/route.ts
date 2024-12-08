@@ -1,9 +1,15 @@
 import { archiveCategory, favoriteCategory, removeCategory, renameCategory } from "@/data/category"
 import { NextResponse } from "next/server"
 
+interface CategoryIdProps {
+  params: Promise<{
+    categoryId: string
+  }>
+}
+
 export const PATCH = async (
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: CategoryIdProps
 ) => {
   try {
     const { categoryId } = await params;
@@ -50,7 +56,7 @@ export const PATCH = async (
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: CategoryIdProps
 ) => {
   try {
     const { categoryId } = await params;

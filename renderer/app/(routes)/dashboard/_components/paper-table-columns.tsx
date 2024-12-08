@@ -1,17 +1,13 @@
 "use client"
 
-import { Paper } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import React from "react";
+import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-// import { FileActions } from "./file-actions";
 import Link from "next/link";
-import { BsFiletypePdf, BsMarkdown } from "react-icons/bs"
-// import { PaperActions } from "./paper-actions";
-import { Folder, PenTool } from "lucide-react";
-// import { CategoryActions } from "../../../../../components/category/category-actions";
+import { BsFiletypePdf } from "react-icons/bs"
+import { Folder } from "lucide-react";
 import { DashboardItem, DashboardItemType } from "@/types/types";
 import { ItemActions } from "./item-actions";
-
 
 export const PaperTableColumns: ColumnDef<DashboardItem>[] = [
   {
@@ -24,12 +20,12 @@ export const PaperTableColumns: ColumnDef<DashboardItem>[] = [
             `/dashboard/${row.original.id}` : `/papers/${row.original.id}`}
           legacyBehavior
         >
-          <div className="flex items-center gap-x-2 hover:cursor-pointer max-w-[300px]">
+          <div className="flex items-center gap-x-2 max-w-[300px] hover:cursor-pointer">
             {row.original.type === DashboardItemType.Paper && (
-              <BsFiletypePdf className="h-4 w-4 text-red-500" />
+              <BsFiletypePdf className="text-red-500 size-4" />
             )}
             {row.original.type === DashboardItemType.Category && (
-              <Folder className="h-4 w-4 text-primary/50 fill-primary/50" />
+              <Folder className="text-primary size-4" />
             )}
             <span className="truncate text-muted-foreground">{row.original.label}</span>
           </div>

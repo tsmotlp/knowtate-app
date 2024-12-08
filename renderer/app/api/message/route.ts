@@ -1,6 +1,20 @@
 import { createMessage, getMessages, getLimitedMessages, removeMessagesOfPaper } from "@/data/message";
 import { NextResponse } from "next/server";
 
+
+interface CreateMessageProps {
+  params: Promise<{
+    paperId: string,
+    limit: number
+  }>
+}
+
+interface DeleteMessageProps {
+  params: Promise<{
+    paperId: string
+  }>
+}
+
 export const POST = async (req: Request) => {
   try {
     const body = await req.json();
@@ -23,19 +37,15 @@ export const POST = async (req: Request) => {
 }
 
 export const GET = async (req: Request,
-  { params }: {
-    params: {
-      paperId: string,
-      limit: number
-    }
-  }
+  { params }: CreateMessageProps
 ) => {
   try {
-    if (!params.limit) {
-      const messages = await getMessages(params.paperId)
+    const { paperId, limit } = await params
+    if (!limit) {
+      const messages = await getMessages(paperId)
       return NextResponse.json(messages)
     } else {
-      const messages = await getLimitedMessages(params.paperId, params.limit)
+      const messages = await getLimitedMessages(paperId, limit)
       return NextResponse.json(messages)
     }
   } catch (error) {
@@ -46,10 +56,11 @@ export const GET = async (req: Request,
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { paperId: string } }
+  { params }: DeleteMessageProps
 ) => {
   try {
-    const removedMessages = await removeMessagesOfPaper(params.paperId)
+    const { paperId } = await params
+    const removedMessages = await removeMessagesOfPaper(paperId)
     if (removedMessages) {
       return new NextResponse("Note removed", { status: 200 })
     }

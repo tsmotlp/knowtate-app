@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { defaultCategories } from "@/components/default-categories"
 import { SearchBar } from "@/components/search-bar"
 import { CategoryType, DashboardItem, DashboardItemType } from "@/types/types"
@@ -76,9 +77,9 @@ export const RecentBrowser = ({
   return (
     <>
       {category ? (
-        <div className="p-4 h-full w-full">
-          <div className="w-full flex items-center justify-between">
-            <div className="h-full w-full flex items-center justify-start gap-x-16">
+        <div className="p-4 size-full">
+          <div className="flex w-full items-center justify-between">
+            <div className="flex size-full items-center justify-start gap-x-16">
               <div className="h-full font-semibold">
                 {category.name}
               </div>
@@ -137,7 +138,7 @@ export const RecentBrowser = ({
           </div>
         </div>
       ) : (
-        <div className="h-full w-full flex items-center justify-center">
+        <div className="flex size-full items-center justify-center">
           出错啦
         </div>
       )}

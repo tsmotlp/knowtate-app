@@ -1,3 +1,4 @@
+import React from 'react';
 import { getArchivedCategories, getCategoriesByParent, getCategory, getFavoritedCategories } from "@/data/category"
 import { getArchivedNotesWithPaper, getFavoritedNotesWithPaper, getNotesWithPaper } from "@/data/note"
 import { getArchivedPapers, getFavoritedPapers, getPapers, getRecentPapers } from "@/data/paper"
@@ -7,43 +8,50 @@ import { Category, Paper } from "@prisma/client"
 import { RecentBrowser } from "../_components/recent-browser"
 
 interface CategoryIdPageProps {
-  params: {
+  params: Promise<{
     categoryId: string
-  }
+  }>
 }
 
 const fetchData = async (categoryId: string) => {
+  let result;
+
   switch (categoryId) {
     case "recents":
-      return {
+      result = {
         papers: await getRecentPapers(),
         subCategories: [],
         notes: []
       };
+      break;
     case "trash":
-      return {
+      result = {
         subCategories: await getArchivedCategories(),
         notes: await getArchivedNotesWithPaper(),
         papers: await getArchivedPapers()
       };
+      break;
     case "favorites":
-      return {
+      result = {
         subCategories: await getFavoritedCategories(),
         notes: await getFavoritedNotesWithPaper(),
         papers: await getFavoritedPapers()
       };
+      break;
     default:
-      const [subCategories, notes, papers] = await Promise.all([
-        getCategoriesByParent(categoryId),
-        getNotesWithPaper(categoryId),
-        getPapers(categoryId)
-      ]);
-      return { subCategories, notes, papers };
+      result = {
+        subCategories: await getCategoriesByParent(categoryId),
+        notes: await getNotesWithPaper(categoryId),
+        papers: await getPapers(categoryId)
+      };
+      break;
   }
+
+  return result;
 };
 
 const CategoryIdPage = async ({ params }: CategoryIdPageProps) => {
-  const { categoryId } = await params as { categoryId: string };
+  const { categoryId } = await params;
   const category = await getCategory(categoryId)
   const { subCategories, notes, papers } = await fetchData(categoryId);
 
@@ -99,7 +107,7 @@ const CategoryIdPage = async ({ params }: CategoryIdPageProps) => {
   ];
 
   return (
-    <div className="h-full w-full">
+    <div className="size-full">
       {categoryId === "recents" ? (
         <RecentBrowser
           category={category}

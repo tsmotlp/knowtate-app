@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -72,7 +73,7 @@ export const CategoryCreator = ({
           variant="secondary"
           size="sm"
         >
-          <FolderPlus className="h-4 w-4 mr-1" />
+          <FolderPlus className="size-4 mr-1" />
           新建分类
         </Button>
       </DialogTrigger>
@@ -80,7 +81,7 @@ export const CategoryCreator = ({
         <DialogHeader>
           <DialogTitle>创建新分类</DialogTitle>
         </DialogHeader>
-        <div className="w-full flex items-center gap-4">
+        <div className="flex w-full items-center gap-4">
           <Input
             placeholder="名称"
             onChange={handleInputChange}

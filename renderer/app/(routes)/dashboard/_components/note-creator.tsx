@@ -1,9 +1,10 @@
 "use client"
 
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { CategoryType, DashboardItem, DashboardItemType } from "@/types/types"
+import { DashboardItem, DashboardItemType } from "@/types/types"
 import { Note } from "@prisma/client"
 import axios from "axios"
 import { FolderPlus } from "lucide-react"
@@ -75,7 +76,7 @@ export const NoteCreator = ({
           variant="secondary"
           size="sm"
         >
-          <FolderPlus className="h-4 w-4 mr-1" />
+          <FolderPlus className="size-4 mr-1" />
           {type === DashboardItemType.Markdown ? "新建笔记" : "新建白板"}
         </Button>
       </DialogTrigger>

@@ -2,13 +2,13 @@ import { getPaperWithNotesAndMessages } from "@/data/paper";
 import { PaperReader } from "./_components/paper-reader";
 
 interface PaperIdPageProps {
-  params: {
+  params: Promise<{
     paperId: string;
-  };
+  }>
 }
 
 const PaperIdPage = async ({ params }: PaperIdPageProps) => {
-  const { paperId } = await params;
+  const { paperId } = await params
   const paper = await getPaperWithNotesAndMessages(paperId)
   if (!paper) {
     return (

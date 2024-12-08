@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react'
 import { defaultCategories } from "@/components/default-categories"
 import { SearchBar } from "@/components/search-bar"
 import { CategoryType, DashboardItem, DashboardItemType } from "@/types/types"
@@ -27,7 +28,7 @@ const CategoryActions = ({ type, parentId, setItems }: CategoryActionsProps) => 
   switch (type) {
     case CategoryType.Papers:
       return (
-        <div className="h-full flex items-center gap-x-2">
+        <div className="flex items-center gap-x-2 h-full">
           <PaperUploader categoryId={parentId} setItems={setItems} />
           <CategoryCreator type={type} parentId={parentId} setItems={setItems} />
         </div>
@@ -64,14 +65,14 @@ export const ItemsBrowser = ({
   return (
     <>
       {!category ? (
-        <div className="h-full w-full flex flex-col items-center justify-center">
+        <div className="size-full flex flex-col items-center justify-center">
           <p className="text-red-500">加载失败</p>
           <p className="text-gray-500">未能找到对应的分类信息</p>
         </div>
       ) : (
-        <div className="p-4 h-full w-full">
-          <div className="w-full flex items-center justify-between">
-            <div className="h-full w-full flex items-center justify-start gap-x-16">
+        <div className="size-full p-4">
+          <div className="flex items-center justify-between w-full">
+            <div className="size-full flex items-center justify-start gap-x-16">
               <div className="h-full font-semibold">
                 {category.name}
               </div>

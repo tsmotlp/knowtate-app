@@ -5,9 +5,15 @@ import fs from 'fs';
 import { removeNotesOfPaper } from "@/data/note";
 import { removeMessagesOfPaper } from "@/data/message";
 
+interface PaperIdProps {
+  params: Promise<{
+    paperId: string
+  }>
+}
+
 export const PATCH = async (
   req: Request,
-  { params }: { params: { paperId: string } }
+  { params }: PaperIdProps
 ) => {
   try {
     const { paperId } = await params;
@@ -60,7 +66,7 @@ export const PATCH = async (
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { paperId: string } }
+  { params }: PaperIdProps
 ) => {
   try {
     const { paperId } = await params;
@@ -89,13 +95,7 @@ export const DELETE = async (
   }
 }
 
-export const GET = async ({
-  params
-}: {
-  params: {
-    paperId: string
-  }
-}) => {
+export const GET = async (request: Request, { params }: PaperIdProps) => {
   try {
     const { paperId } = await params;
     const paper = await getPaperById(paperId)

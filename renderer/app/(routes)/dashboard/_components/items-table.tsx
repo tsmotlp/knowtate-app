@@ -1,9 +1,9 @@
 "use client";
 
+import React from 'react';
 import {
   flexRender,
   getCoreRowModel,
-  Table as ReactTable,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -29,25 +29,18 @@ export const ItemsTable = ({
   type,
   items
 }: ItemsTableProps) => {
-  let table: ReactTable<DashboardItem>;
-  if (type === CategoryType.Papers) {
-    table = useReactTable({
-      columns: PaperTableColumns,
-      data: items,
-      getCoreRowModel: getCoreRowModel()
-    })
-  } else {
-    table = useReactTable({
-      columns: DefaultTableColumns,
-      data: items,
-      getCoreRowModel: getCoreRowModel()
-    })
-  }
+  const columns = type === CategoryType.Papers ? PaperTableColumns : DefaultTableColumns;
+
+  const table = useReactTable({
+    columns,
+    data: items,
+    getCoreRowModel: getCoreRowModel()
+  });
 
   return (
     <>
       {items.length > 0 ? (
-        <div className="h-full w-full border-b overflow-x-auto">
+        <div className="overflow-x-auto size-full border-b">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -55,7 +48,7 @@ export const ItemsTable = ({
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead key={header.id}
-                        className="font-semibold text-medium whitespace-nowrap"
+                        className="whitespace-nowrap font-semibold"
                       >
                         {header.isPlaceholder ? null : flexRender(
                           header.column.columnDef.header,
@@ -97,7 +90,7 @@ export const ItemsTable = ({
           </Table>
         </div>
       ) : (
-        <div className="h-full w-full flex flex-col items-center justify-center gap-4 pt-60">
+        <div className="flex flex-col items-center justify-center size-full gap-4 pt-60">
           <Image
             src="/men.svg"
             height="300"
@@ -112,7 +105,7 @@ export const ItemsTable = ({
             alt="Empty"
             className="hidden dark:block"
           />
-          <h3 className="font-semibold text-lg">Nothing Found!</h3>
+          <h3 className="text-lg font-semibold">Nothing Found!</h3>
         </div>
       )}
     </>

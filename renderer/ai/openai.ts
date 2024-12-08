@@ -1,9 +1,4 @@
 import OpenAI from "openai";
-import { FaissStore } from "@langchain/community/vectorstores/faiss";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import { DATA_DIR, HISTORY_MESSAGE_N, VECTOR_SEARCH_K } from "@/constants";
-import { HttpsProxyAgent } from "https-proxy-agent";
 import { ChatMessageProps } from "@/app/papers/[paperId]/_components/chat/chat-message";
 
 const openai = new OpenAI({
@@ -13,31 +8,10 @@ const openai = new OpenAI({
 
 export async function OpenAIChat(paperId: string, prompt: string, prevMessages: ChatMessageProps[] | undefined) {
   try {
-    // let proxy_url = ""
-    // if (process.env.PROXY_URL) {
-    //   proxy_url = process.env.PROXY_URL
-    // }
-    // const proxyAgent = new HttpsProxyAgent(proxy_url);
-
-    // // 1. vectorize use message
-    // const embeddings = new OpenAIEmbeddings({
-    //   openAIApiKey: process.env.OPENAI_API_KEY,
-    //   configuration: {
-    //     httpAgent: proxyAgent,
-    //   },
-    // });
-
-    // const vectors_path = `${DATA_DIR}/faiss/${paperId}`;
-
-    // const vectorstore = await FaissStore.load(vectors_path, embeddings);
-
-    // const results = await vectorstore.similaritySearch(prompt, VECTOR_SEARCH_K);
-
     const formattedPrevMessages = prevMessages ? prevMessages.map((msg) => ({
       role: msg.role,
       content: msg.content,
     })) : [];
-
 
     const response = await openai.chat.completions.create(
       {
@@ -47,8 +21,7 @@ export async function OpenAIChat(paperId: string, prompt: string, prevMessages: 
         messages: [
           {
             role: "system",
-            content:
-              "Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.",
+            content: "Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.",
           },
           {
             role: "user",
@@ -64,21 +37,43 @@ export async function OpenAIChat(paperId: string, prompt: string, prevMessages: 
           
           \n----------------\n
           
-
-          
           USER INPUT: ${prompt}`,
           },
         ],
-      },
-      // {
-      //   httpAgent: proxyAgent,
-      //   timeout: 30000,
-      // },
+      }
     );
 
-    const stream = OpenAIStream(response);
-    return stream
+    // 简化流处理逻辑
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+
+        try {
+          for await (const chunk of response) {
+            const content = chunk.choices[0]?.delta?.content;
+            if (content) {
+              controller.enqueue(encoder.encode(content));
+            }
+          }
+        } catch (error) {
+          controller.error(error);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    // 返回标准的流式响应
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
+
   } catch (error) {
-    console.log("[OPENAI_CHAT_COMPLETION_ERROR]", error)
+    console.log("[OPENAI_CHAT_COMPLETION_ERROR]", error);
+    throw error;
   }
 }

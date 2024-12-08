@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react";
 import { DashboardItem } from "@/types/types";
 import { format } from "date-fns";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -31,15 +32,15 @@ export const RecentItem = ({
 
 
   return (
-    <div className="h-full w-full">
-      <div className="group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium">
+    <div className="size-full">
+      <div className="group min-h-[27px] w-full py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5 flex items-center">
         <div
           role="button"
-          className="h-full rounded-sm mx-1"
+          className="mx-1 h-full rounded-sm"
           onClick={handleExpand}
         >
           <ChevronIcon
-            className="h-4 w-4 shrink-0 text-muted-foreground/50"
+            className="size-4 shrink-0 text-muted-foreground/50"
           />
         </div>
         <span className="truncate">
@@ -57,7 +58,7 @@ export const RecentItem = ({
                 href={`/papers/${item.id}`}
                 className="flex items-center hover:underline"
               >
-                <BsFiletypePdf className="h-4 w-4 text-red-500 mr-2" />
+                <BsFiletypePdf className="size-4 mr-2 text-red-500" />
                 <span className="text-muted-foreground">{item.label}</span>
               </Link>
               <div className="text-muted-foreground">

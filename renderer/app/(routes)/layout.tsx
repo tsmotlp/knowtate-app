@@ -1,3 +1,4 @@
+import React from "react"
 import { Sidebar } from "@/components/sidebar"
 
 const DashboardLayout = ({
@@ -6,9 +7,9 @@ const DashboardLayout = ({
     children: React.ReactNode
 }) => {
     return (
-        <div className="h-full w-full flex">
+        <div className="size-full flex">
             <Sidebar />
-            <main className="h-full w-full overflow-auto">
+            <main className="size-full overflow-auto">
                 {children}
             </main>
         </div>
