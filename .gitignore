@@ -43,7 +43,6 @@ yarn-error.log*
 # Electron specific
 /out
 /app
-/main
 renderer/.next
 renderer/out
 *.cert
